@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포트폴리오 인쇄</title>
+  <style>
+    body {
+      background: #fff !important;
+      color: #222 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+    }
+    .print-portfolio {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      background: #fff;
+      color: #222;
+    }
+    .section {
+      background: #fff;
+      border: 1px solid #222;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      padding: 24px;
+      box-shadow: none;
+    }
+    .section-title {
+      color: #222;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #222;
+      padding-bottom: 8px;
+    }
+    .basic-info {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #222;
+    }
+    .info-center {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1.2;
+      min-width: 200px;
+    }
+    .info-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+      min-width: 180px;
+    }
+    .info-label {
+      color: #222;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .info-value {
+      color: #222;
+    }
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .stack-tag {
+      background: #222;
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.9rem;
+    }
+    .lang-list, .cert-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .lang-item, .cert-item {
+      background: #f3eee9;
+      padding: 16px;
+      border-radius: 8px;
+      color: #222;
+      border: 1px solid #222;
+    }
+    .project-section {
+      margin-bottom: 24px;
+    }
+    .project-title {
+      color: #222;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .project-desc {
+      color: #222;
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-top: 0;
+    }
+    .project-image {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      border: 1px solid #222;
+    }
+    .self-intro {
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #222;
+    }
+    .info-value a {
+      word-break: break-all;
+      overflow-wrap: break-word;
+      display: inline-block;
+      max-width: 100%;
+    }
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-portfolio" id="print-portfolio"></div>
+  <script>
+    // URL에서 ID 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    // 글 상세 정보 불러오기
+    fetch(`https://port4dev-xh8k.onrender.com/api/posts/${postId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !data.content) {
+          document.getElementById('print-portfolio').innerHTML = '<div>포트폴리오 정보를 찾을 수 없습니다.</div>';
+          return;
+        }
+        let p;
+        try {
+          p = JSON.parse(data.content);
+        } catch (e) {
+          document.getElementById('print-portfolio').innerHTML = '<div>포트폴리오 데이터가 올바르지 않습니다.</div>';
+          return;
+        }
+        const detail = document.getElementById('print-portfolio');
+        detail.innerHTML = `
+          <div class="section">
+            <div class="section-title">기본 정보</div>
+            <div class="basic-info">
+              ${p.photo ? `<img src="${p.photo}" alt="프로필" class="profile-image" />` : ''}
+              <div class="info-center">
+                <div class="info-item"><div class="info-label">이름</div><div class="info-value">${p.name}</div></div>
+                <div class="info-item"><div class="info-label">나이</div><div class="info-value">${p.age}세</div></div>
+                <div class="info-item"><div class="info-label">학력</div><div class="info-value">${p.edu}</div></div>
+                <div class="info-item"><div class="info-label">기술 스택</div><div class="stack-tags">${(p.stack || '').split(' ').map(tag => tag ? `<span class="stack-tag">${tag}</span>` : '').join('')}</div></div>
+              </div>
+              <div class="info-right">
+                <div class="info-item"><div class="info-label">경력</div><div class="info-value">${p.career}</div></div>
+                ${p.contact ? `<div class="info-item"><div class="info-label">연락처</div><div class="info-value">${p.contact}</div></div>` : ''}
+                ${p.hope ? `<div class="info-item"><div class="info-label">희망 분야</div><div class="info-value">${p.hope}</div></div>` : ''}
+                ${p.github ? `<div class="info-item"><div class="info-label">깃 주소</div><div class="info-value"><a href="${p.github}" target="_blank" style="color:#222; text-decoration:underline;">${p.github}</a></div></div>` : ''}
+              </div>
+            </div>
+          </div>
+          ${p.langs && p.langs.length > 0 ? `
+            <div class="section">
+              <div class="section-title">어학점수</div>
+              <div class="lang-list">
+                ${(p.langs || []).map(lang => `
+                  <div class="lang-item">
+                    <div><span class="info-label">${lang.test}</span> <span class="info-value">${lang.score}</span></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+          ${p.certs && p.certs.length > 0 ? `
+            <div class="section">
+              <div class="section-title">자격증</div>
+              <div class="cert-list">
+                ${(p.certs || []).map(cert => `
+                  <div class="cert-item">
+                    <div><span class="info-label">${cert.name}</span></div>
+                    <div>발급기관: ${cert.org}</div>
+                    <div>취득일: ${cert.date}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+          ${p.projects && p.projects.length > 0 ? `
+            <div class="section project-section">
+              <div class="section-title">프로젝트</div>
+              ${(p.projects || []).map(proj => `
+                <div style="margin-bottom:18px;">
+                  <div class="project-title">${proj.title}</div>
+                  <div class="project-desc">${proj.desc}</div>
+                  ${proj.img ? `<img src="${proj.img}" alt="${proj.title}" class="project-image" />` : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          ${p.selfIntro ? `
+            <div class="section">
+              <div class="section-title">자기소개서</div>
+              <div class="self-intro">${p.selfIntro}</div>
+            </div>
+          ` : ''}
+        `;
+        // 인쇄(또는 PDF 저장) 자동 실행
+        setTimeout(() => { window.print(); }, 500);
+      });
+  </script>
+</body>
+</html> 

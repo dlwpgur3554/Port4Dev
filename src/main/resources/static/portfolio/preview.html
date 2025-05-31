@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 미리보기</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/portfolio/portfolio.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3eee9;
+            color: #222;
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+        }
+
+        .portfolio-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .portfolio-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .section, .project-section, .cert-section, .lang-section {
+            background: #726e6b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #e0b97d;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0b97d;
+        }
+
+        .basic-info {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e0b97d;
+        }
+
+        .info-center {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1.2;
+            min-width: 200px;
+        }
+
+        .info-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .info-label {
+            color: #e0b97d;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: #fff;
+        }
+
+        .stack-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stack-tag {
+            background: #e0b97d;
+            color: #726e6b;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+        }
+
+        .lang-tabs, .cert-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #bdb8b2;
+            padding-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .lang-tab-btn, .cert-tab-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            background: #bdb8b2;
+            color: #726e6b;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-tab-btn.active, .cert-tab-btn.active {
+            background: #e0b97d;
+            color: #fff;
+        }
+
+        .lang-detail, .cert-detail {
+            background: #726e6b;
+            padding: 0;
+            border-radius: 8px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .lang-info, .cert-info {
+            margin: 0;
+            padding: 0;
+        }
+
+        .lang-test, .cert-name {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #e0b97d;
+            margin-top: 0;
+        }
+
+        .lang-score, .cert-org, .cert-date {
+            color: #fff;
+            font-size: 1rem;
+            margin-left: 0;
+            margin-top: 0;
+        }
+
+        .project-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #bdb8b2;
+            padding-bottom: 8px;
+        }
+
+        .project-tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            background: #bdb8b2;
+            color: #726e6b;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .project-tab-btn.active {
+            background: #e0b97d;
+            color: #fff;
+        }
+
+        .project-detail {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            color: inherit;
+        }
+
+        .project-info {
+            flex: 1;
+            min-width: 300px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .project-title {
+            color: #e0b97d;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .project-desc {
+            color: #fff;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-top: 0;
+        }
+
+        .project-image-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .project-image {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .self-intro {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: #fff;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .back-button .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #e0b97d;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .back-button .btn:hover {
+            background: #c9a56d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="left-section">
+            <img src="/logo/logo3.png" alt="로고" class="logo-img" id="mainLogo" />
+            <h1 class="logo-text"></h1>
+        </div>
+        <div class="center-section"></div>
+        <div class="right-section" id="authButtons"></div>
+    </div>
+
+    <div class="portfolio-container">
+        <div class="portfolio-header" style="display:flex; align-items:center; justify-content:center; margin-bottom:32px; position:relative;">
+            <h1 style="color:#e0b97d; margin:0; text-align:center; width:100%;">포트폴리오 미리보기</h1>
+        </div>
+        <div id="portfolio-detail">
+            <div class="section">
+                <div class="section-title">기본 정보</div>
+                <div class="basic-info">
+                    <img src="/images/portfolio-preview.jpg" alt="대표사진" class="profile-image" />
+                    <div class="info-center">
+                        <div class="info-item">
+                            <div class="info-label">이름</div>
+                            <div class="info-value">홍길동</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">나이</div>
+                            <div class="info-value">27세</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">학력</div>
+                            <div class="info-value">대학교 졸업</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">기술 스택</div>
+                            <div class="stack-tags">
+                                <span class="stack-tag">HTML</span>
+                                <span class="stack-tag">CSS</span>
+                                <span class="stack-tag">JavaScript</span>
+                                <span class="stack-tag">React</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-right">
+                        <div class="info-item">
+                            <div class="info-label">경력</div>
+                            <div class="info-value">신입</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">연락처</div>
+                            <div class="info-value">010-1234-5678</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">희망 분야</div>
+                            <div class="info-value">웹개발/프론트엔드</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">깃 주소</div>
+                            <div class="info-value"><a href="https://github.com/Port4Dev" target="_blank" style="color:#e0b97d; text-decoration:underline;">https://github.com/Port4Dev</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section lang-section">
+                <div class="section-title">어학점수</div>
+                <div class="lang-tabs" id="lang-tabs"></div>
+                <div id="lang-detail-area"></div>
+            </div>
+            <div class="section cert-section">
+                <div class="section-title">자격증</div>
+                <div class="cert-tabs" id="cert-tabs"></div>
+                <div id="cert-detail-area"></div>
+            </div>
+            <div class="section project-section">
+                <div class="section-title">프로젝트</div>
+                <div class="project-tabs" id="project-tabs"></div>
+                <div id="project-detail-area"></div>
+            </div>
+            <div class="section">
+                <div class="section-title">자기소개서</div>
+                <div class="self-intro">사용자 경험을 중시하는 프론트엔드 개발자입니다. 새로운 기술을 배우는 것을 즐기며, 협업과 소통을 중요하게 생각합니다.</div>
+            </div>
+        </div>
+        <div class="back-button" style="text-align:center; margin-top:40px;">
+            <a href="/" class="btn" style="display:inline-block; padding:12px 24px; background:#e0b97d; color:#fff; text-decoration:none; border-radius:8px; font-weight:500; transition:background-color 0.3s;">메인으로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        // 로그인 상태에 따른 버튼 업데이트
+        fetch('/api/auth/check')
+            .then(response => response.json())
+            .then(data => {
+                const authButtons = document.getElementById('authButtons');
+                authButtons.innerHTML = '';
+            });
+
+        // 예시 어학점수 데이터
+        const langs = [
+            { test: 'TOEIC', score: '900' },
+            { test: 'OPIc', score: 'IH' }
+        ];
+        // 예시 자격증 데이터
+        const certs = [
+            { name: '정보처리기사', org: '한국산업인력공단', date: '2023.08' },
+            { name: 'SQLD', org: '한국데이터산업진흥원', date: '2022.11' }
+        ];
+        // 예시 프로젝트 데이터
+        const projects = [
+            {
+                title: '포트폴리오 웹사이트',
+                desc: 'React와 Node.js를 활용한 개인 포트폴리오 웹사이트 개발. 반응형 UI, 게시판 기능 구현.',
+                img: '/images/portfolio-preview-project.jpg'
+            },
+            {
+                title: '팀 협업 프로젝트',
+                desc: 'HTML, CSS, JavaScript로 팀 협업 웹앱 개발. 실시간 채팅, 공지사항, 일정관리 기능 포함.',
+                img: ''
+            }
+        ];
+
+        // 탭 렌더링(detail.html과 동일)
+        function renderTabs() {
+            // 어학점수
+            const langTabs = document.getElementById('lang-tabs');
+            const langDetail = document.getElementById('lang-detail-area');
+            langTabs.innerHTML = '';
+            langs.forEach((lang, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = lang.test;
+                btn.className = 'lang-tab-btn' + (idx === 0 ? ' active' : '');
+                btn.onclick = () => selectLang(idx);
+                langTabs.appendChild(btn);
+            });
+            function selectLang(idx) {
+                Array.from(langTabs.children).forEach((btn, i) => {
+                    btn.className = 'lang-tab-btn' + (i === idx ? ' active' : '');
+                });
+                const lang = langs[idx];
+                langDetail.innerHTML = `<div class="lang-detail"><div class="lang-info"><div class="lang-test">${lang.test}</div><div class="lang-score">${lang.score}</div></div></div>`;
+            }
+            selectLang(0);
+            // 자격증
+            const certTabs = document.getElementById('cert-tabs');
+            const certDetail = document.getElementById('cert-detail-area');
+            certTabs.innerHTML = '';
+            certs.forEach((cert, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = cert.name;
+                btn.className = 'cert-tab-btn' + (idx === 0 ? ' active' : '');
+                btn.onclick = () => selectCert(idx);
+                certTabs.appendChild(btn);
+            });
+            function selectCert(idx) {
+                Array.from(certTabs.children).forEach((btn, i) => {
+                    btn.className = 'cert-tab-btn' + (i === idx ? ' active' : '');
+                });
+                const cert = certs[idx];
+                certDetail.innerHTML = `<div class="cert-detail"><div class="cert-info"><div class="cert-name">${cert.name}</div><div class="cert-org">${cert.org}</div><div class="cert-date">${cert.date}</div></div></div>`;
+            }
+            selectCert(0);
+            // 프로젝트
+            const projectTabs = document.getElementById('project-tabs');
+            const projectDetail = document.getElementById('project-detail-area');
+            projectTabs.innerHTML = '';
+            projects.forEach((proj, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = proj.title;
+                btn.className = 'project-tab-btn' + (idx === 0 ? ' active' : '');
+                btn.onclick = () => selectProject(idx);
+                projectTabs.appendChild(btn);
+            });
+            function selectProject(idx) {
+                Array.from(projectTabs.children).forEach((btn, i) => {
+                    btn.className = 'project-tab-btn' + (i === idx ? ' active' : '');
+                });
+                const proj = projects[idx];
+                projectDetail.innerHTML = `<div class="project-detail"><div class="project-info"><div class="project-title">${proj.title}</div><div class="project-desc">${proj.desc}</div></div>${proj.img ? `<div class="project-image-container"><img src="/images/portfolio-preview-project.jpg" alt="${proj.title}" class="project-image" /></div>` : ''}</div>`;
+            }
+            selectProject(0);
+        }
+        renderTabs();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var logo = document.getElementById('mainLogo');
+            if (logo) {
+                logo.style.cursor = 'pointer';
+                logo.onclick = function() {
+                    window.location.href = '/';
+                };
+            }
+        });
+    </script>
+</body>
+</html> 

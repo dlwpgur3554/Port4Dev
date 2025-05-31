@@ -1,0 +1,19 @@
+/* PDF 변환 전용 최소 CSS */
+.pdf-export, .pdf-export * {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.pdf-export .header,
+.pdf-export #downloadPdfBtn,
+.pdf-export #editButtons {
+  display: none !important;
+}
+.pdf-export .section,
+.pdf-export .project-section,
+.pdf-export .cert-section,
+.pdf-export .lang-section {
+  background: #fff !important;
+  color: #222 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+} 

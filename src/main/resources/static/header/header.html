@@ -1,0 +1,19 @@
+<div class="header">
+    <div class="left-section">
+      <img src="/logo/logo3.png" alt="로고" class="logo-img" id="mainLogo" />
+      <h1 class="logo-text"></h1>
+    </div>
+    <!-- 로그인/회원가입 버튼 관련 코드 완전히 삭제 -->
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var logo = document.getElementById('mainLogo');
+      if (logo) {
+        logo.style.cursor = 'pointer';
+        logo.onclick = function() {
+          window.location.href = '/';
+        };
+      }
+    });
+  </script>
+  

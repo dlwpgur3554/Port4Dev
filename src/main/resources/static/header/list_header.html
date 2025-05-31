@@ -1,0 +1,45 @@
+<div class="header">
+  <div class="left-section">
+    <img src="/logo/logo3.png" alt="로고" class="logo-img" id="mainLogo" />
+    <h1 class="logo-text"></h1>
+  </div>
+  <div class="center-section"></div>
+  <div class="right-section" id="authButtons-list">
+    <a href="/login.html" class="list-auth-link">로그인</a>
+    <a href="/terms.html" class="list-auth-link">회원가입</a>
+  </div>
+</div>
+<style>
+  .right-section {
+    margin-right: 24px;
+  }
+  .right-section .list-auth-link {
+    background: none;
+    color: #bfa46a;
+    border: none;
+    border-radius: 0;
+    padding: 0 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 6px;
+    cursor: pointer;
+    transition: color 0.2s;
+    box-shadow: none;
+  }
+  .right-section .list-auth-link:hover {
+    color: #e0b97d;
+    text-decoration: underline;
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.getElementById('mainLogo');
+    if (logo) {
+      logo.style.cursor = 'pointer';
+      logo.onclick = function() {
+        window.location.href = '/';
+      };
+    }
+  });
+</script> 
