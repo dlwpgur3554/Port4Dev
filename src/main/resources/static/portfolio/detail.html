@@ -383,15 +383,11 @@
         }
         const detail = document.getElementById('portfolio-detail');
         const currentUser = localStorage.getItem('username') || sessionStorage.getItem('username');
-        if (data.author !== currentUser) {
-            showCustomModal('본인이 작성한 포트폴리오만 확인할 수 있습니다.');
-            return;
-        }
         
         // 수정/삭제 버튼은 작성자만 보이도록 설정
         const editButtons = document.getElementById('editButtons');
         if (editButtons) {
-            editButtons.style.display = 'flex';
+            editButtons.style.display = data.author === currentUser ? 'flex' : 'none';
         }
 
         detail.innerHTML = `

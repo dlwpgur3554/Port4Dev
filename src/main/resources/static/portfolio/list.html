@@ -252,11 +252,6 @@
                     <div class='card-detail-link'>자세히 보기 →</div>
                 `;
                 card.onclick = () => {
-                    const currentUser = localStorage.getItem('username') || sessionStorage.getItem('username');
-                    if (post.author !== currentUser) {
-                        showCustomModal('본인이 작성한 포트폴리오만 확인할 수 있습니다.');
-                        return;
-                    }
                     location.href = `detail.html?id=${post.id}`;
                 };
                 list.appendChild(card);
