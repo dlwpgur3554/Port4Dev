@@ -327,8 +327,7 @@
         localStorage.removeItem('username');
         sessionStorage.removeItem('isLoggedIn');
         sessionStorage.removeItem('username');
-        updateAuthButtons();
-        window.location.reload();
+        window.location.href = '/';
     }
 
     // 페이지 로드 시 로그인 상태 확인

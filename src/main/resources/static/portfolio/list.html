@@ -217,12 +217,11 @@
 
     // 로그아웃 처리
     function handleLogout() {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      sessionStorage.removeItem('isLoggedIn');
-      sessionStorage.removeItem('username');
-      updateAuthButtons();
-      window.location.reload();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('username');
+        window.location.href = '/';
     }
 
     // 페이지 로드 시 로그인 상태 확인

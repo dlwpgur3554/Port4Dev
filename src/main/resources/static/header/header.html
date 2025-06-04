@@ -15,5 +15,13 @@
         };
       }
     });
+
+    function handleLogout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('username');
+        window.location.href = '/';
+    }
   </script>
   
