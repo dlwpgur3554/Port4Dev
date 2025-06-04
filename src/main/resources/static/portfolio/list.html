@@ -184,6 +184,13 @@
     </div>
 
   <script>
+        // 페이지 로드 즉시 로그인 체크
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            window.location.href = '/';
+            throw new Error('로그인이 필요합니다.');
+        }
+
         function showCustomModal(msg, callback) {
             const modal = document.getElementById('customModal');
             const msgDiv = document.getElementById('customModalMsg');
