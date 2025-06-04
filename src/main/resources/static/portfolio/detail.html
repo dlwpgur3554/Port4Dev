@@ -656,13 +656,15 @@
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
         if (!isLoggedIn) {
             // 페이지 내용을 숨기고 모달만 표시
-            document.body.style.display = 'none'; // 페이지 전체 내용을 숨김
-            document.getElementById('customModal').style.display = 'flex'; // 모달만 보이도록 설정
+            document.querySelector('.portfolio-container').style.display = 'none'; // 주 내용 컨테이너 숨김
+            document.getElementById('customModal').style.display = 'flex'; // 모달 보이도록 설정
 
             // 모달 메시지와 확인 버튼 동작 설정
             showCustomModal('로그인이 필요한 서비스입니다.', () => {
                 window.location.href = '/login.html'; // 확인 버튼 클릭 시 로그인 페이지로 이동
             });
+             // body의 display: none; 제거
+            document.body.style.display = ''; // body display 속성을 기본값으로 되돌림 (혹시 설정되어 있다면)
             return;
         }
         // 로그인된 경우 포트폴리오 상세 내용 로드
