@@ -651,16 +651,18 @@
       };
     }
 
-    // 페이지 로드 시 로그인 체크
+    // 페이지 로드 시 로그인 체크 (detail.html)
     window.onload = function() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
         if (!isLoggedIn) {
-            showCustomModal('로그인이 필요한 서비스입니다.', () => {
-                window.location.href = '/login.html';
-            });
-            // 페이지 내용 숨김
-            document.body.style.display = 'none';
+            // 페이지 내용을 숨기고 모달만 표시
+            document.body.style.display = 'none'; // 페이지 전체 내용을 숨김
             document.getElementById('customModal').style.display = 'flex'; // 모달만 보이도록 설정
+
+            // 모달 메시지와 확인 버튼 동작 설정
+            showCustomModal('로그인이 필요한 서비스입니다.', () => {
+                window.location.href = '/login.html'; // 확인 버튼 클릭 시 로그인 페이지로 이동
+            });
             return;
         }
         // 로그인된 경우 포트폴리오 상세 내용 로드

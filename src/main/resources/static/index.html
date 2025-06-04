@@ -16,7 +16,7 @@
             <h1 class="main-title">당신의 포트폴리오를<br>더 특별하게</h1>
             <p class="sub-title">개발자들의 프로젝트를 한눈에 만나보세요</p>
             <div class="cta-buttons">
-                <a href="/portfolio/list.html" class="cta-button primary start-btn">시작하기</a>
+                <a href="#" class="cta-button primary start-btn">시작하기</a>
                 <a href="/portfolio/preview.html" class="cta-button secondary">포트폴리오 미리보기</a>
             </div>
         </div>
@@ -44,15 +44,16 @@
         }
 
         // 시작하기 버튼 클릭 시 로그인 체크
-        document.querySelector('.start-btn').onclick = function() {
+        document.querySelector('.start-btn').onclick = function(event) {
+            event.preventDefault(); // 기본 링크 이동 방지
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
             if (!isLoggedIn) {
                 showCustomModal('로그인이 필요한 서비스입니다.', () => {
                     window.location.href = '/login.html';
                 });
-                return;
+            } else {
+                window.location.href = '/portfolio/list.html';
             }
-            window.location.href = '/portfolio/list.html';
         };
     </script>
 </body>
