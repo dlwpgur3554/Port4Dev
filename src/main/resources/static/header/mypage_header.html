@@ -1,0 +1,35 @@
+<header class="header" style="background:#726e6b; padding:0 40px; height:70px; display:flex; align-items:center; justify-content:center; border-bottom:1.5px solid #bdb8b2;">
+    <div class="left-section" style="display:flex; align-items:center;">
+        <img src="/logo/logo3.png" alt="로고" class="logo-img" style="max-width:70px; cursor:pointer;" onclick="window.location.href='/'" />
+    </div>
+</header>
+
+<script>
+    // 로그인 상태 확인 및 버튼 업데이트
+    function updateAuthButtons() {
+        const authButtons = document.getElementById('authButtons');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+        if (isLoggedIn) {
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            authButtons.innerHTML = `
+                <a href="/mypage/profile.html">마이페이지</a>
+                <button onclick="handleLogout()">로그아웃</button>
+            `;
+        } else {
+            authButtons.innerHTML = '';
+        }
+    }
+
+    // 로그아웃 처리
+    function handleLogout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('username');
+        updateAuthButtons();
+        window.location.reload();
+    }
+
+    // 페이지 로드 시 로그인 상태 확인
+    updateAuthButtons();
+</script> 

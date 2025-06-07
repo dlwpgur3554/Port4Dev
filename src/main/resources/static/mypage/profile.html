@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이페이지</title>
+    <link rel="stylesheet" href="/css/header.css">
     <style>
         body {
             margin: 0;
@@ -116,6 +117,10 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <!-- 헤더는 JavaScript로 동적 삽입됩니다 -->
+    </div>
+
     <!-- 비밀번호 인증 모달 -->
     <div id="pwAuthModal" style="display:flex; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:2000; align-items:center; justify-content:center;">
         <div style="background:#fff; border-radius:10px; padding:32px 28px; min-width:320px; box-shadow:0 4px 24px rgba(0,0,0,0.15); position:relative;">
@@ -156,139 +161,146 @@
         </div>
     </div>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 마이페이지 진입 시 비밀번호 인증
-        const pwAuthModal = document.getElementById('pwAuthModal');
-        const mypageContent = document.getElementById('mypageContent');
-        document.getElementById('authPwBtn').onclick = async function() {
-            const password = document.getElementById('authPw').value;
-            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
-            if (!password) {
-                document.getElementById('authPwError').textContent = '비밀번호를 입력하세요.';
-                document.getElementById('authPwError').style.display = 'block';
-                return;
-            }
-            // 로그인 API로 인증
-            const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+        // 헤더 동적 삽입
+        fetch('/header/mypage_header.html')
+            .then(res => res.text())
+            .then(data => {
+                document.querySelector('.header').outerHTML = data;
             });
-            if (res.ok) {
-                pwAuthModal.style.display = 'none';
-                mypageContent.style.display = '';
-            } else {
-                document.getElementById('authPwError').textContent = '비밀번호가 일치하지 않습니다.';
-                document.getElementById('authPwError').style.display = 'block';
-            }
-        };
 
-        // 비밀번호 변경 모달
-        document.getElementById('changePwBtn').onclick = function() {
-            document.getElementById('pwModal').style.display = 'flex';
-        };
-        document.getElementById('pwModalClose').onclick = function() {
-            document.getElementById('pwModal').style.display = 'none';
-            document.getElementById('newPw').value = '';
-            document.getElementById('newPwCheck').value = '';
-            document.getElementById('pwError').style.display = 'none';
-        };
-        document.getElementById('pwChangeSubmit').onclick = async function() {
-            const newPw = document.getElementById('newPw').value;
-            const newPwCheck = document.getElementById('newPwCheck').value;
-            const errorDiv = document.getElementById('pwError');
-            if (!newPw || !newPwCheck) {
-                errorDiv.textContent = '비밀번호를 모두 입력하세요.';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            if (newPw !== newPwCheck) {
-                errorDiv.textContent = '비밀번호가 일치하지 않습니다.';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
-            const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/update', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password: newPw })
-            });
-            if (res.ok) {
-                alert('비밀번호가 변경되었습니다.');
+        document.addEventListener('DOMContentLoaded', function() {
+            // 마이페이지 진입 시 비밀번호 인증
+            const pwAuthModal = document.getElementById('pwAuthModal');
+            const mypageContent = document.getElementById('mypageContent');
+            document.getElementById('authPwBtn').onclick = async function() {
+                const password = document.getElementById('authPw').value;
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                if (!password) {
+                    document.getElementById('authPwError').textContent = '비밀번호를 입력하세요.';
+                    document.getElementById('authPwError').style.display = 'block';
+                    return;
+                }
+                // 로그인 API로 인증
+                const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                if (res.ok) {
+                    pwAuthModal.style.display = 'none';
+                    mypageContent.style.display = '';
+                } else {
+                    document.getElementById('authPwError').textContent = '비밀번호가 일치하지 않습니다.';
+                    document.getElementById('authPwError').style.display = 'block';
+                }
+            };
+
+            // 비밀번호 변경 모달
+            document.getElementById('changePwBtn').onclick = function() {
+                document.getElementById('pwModal').style.display = 'flex';
+            };
+            document.getElementById('pwModalClose').onclick = function() {
                 document.getElementById('pwModal').style.display = 'none';
                 document.getElementById('newPw').value = '';
                 document.getElementById('newPwCheck').value = '';
-                errorDiv.style.display = 'none';
-            } else {
-                errorDiv.textContent = '비밀번호 변경에 실패했습니다.';
-                errorDiv.style.display = 'block';
-            }
-        };
-
-        // 내가 쓴 포트폴리오 불러오기
-        async function loadMyPortfolios() {
-            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
-            const res = await fetch('https://port4dev-xh8k.onrender.com/api/posts');
-            if (res.ok) {
-                const posts = await res.json();
-                const myPosts = posts.filter(post => post.author === username);
-                const list = document.getElementById('myPortfolioList');
-                list.innerHTML = '';
-                myPosts.forEach(post => {
-                    const p = JSON.parse(post.content);
-                    const card = document.createElement('div');
-                    card.className = 'portfolio-card';
-                    card.innerHTML = `
-                        <div class='title'>${p.name} 포트폴리오</div>
-                        <div>${p.hope}</div>
-                        <div class='actions'>
-                            <button onclick="location.href='/portfolio/write.html?id=${post.id}'">수정</button>
-                            <button class='delete-btn' onclick="deletePortfolio(${post.id})">삭제</button>
-                        </div>
-                    `;
-                    list.appendChild(card);
+                document.getElementById('pwError').style.display = 'none';
+            };
+            document.getElementById('pwChangeSubmit').onclick = async function() {
+                const newPw = document.getElementById('newPw').value;
+                const newPwCheck = document.getElementById('newPwCheck').value;
+                const errorDiv = document.getElementById('pwError');
+                if (!newPw || !newPwCheck) {
+                    errorDiv.textContent = '비밀번호를 모두 입력하세요.';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                if (newPw !== newPwCheck) {
+                    errorDiv.textContent = '비밀번호가 일치하지 않습니다.';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password: newPw })
                 });
-            }
-        }
-        loadMyPortfolios();
+                if (res.ok) {
+                    alert('비밀번호가 변경되었습니다.');
+                    document.getElementById('pwModal').style.display = 'none';
+                    document.getElementById('newPw').value = '';
+                    document.getElementById('newPwCheck').value = '';
+                    errorDiv.style.display = 'none';
+                } else {
+                    errorDiv.textContent = '비밀번호 변경에 실패했습니다.';
+                    errorDiv.style.display = 'block';
+                }
+            };
 
-        // 포트폴리오 삭제
-        window.deletePortfolio = async function(id) {
-            if (!confirm('정말로 삭제하시겠습니까?')) return;
-            const res = await fetch(`https://port4dev-xh8k.onrender.com/api/posts/${id}`, { method: 'DELETE' });
-            if (res.ok) {
-                alert('삭제되었습니다.');
-                loadMyPortfolios();
-            } else {
-                alert('삭제에 실패했습니다.');
+            // 내가 쓴 포트폴리오 불러오기
+            async function loadMyPortfolios() {
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                const res = await fetch('https://port4dev-xh8k.onrender.com/api/posts');
+                if (res.ok) {
+                    const posts = await res.json();
+                    const myPosts = posts.filter(post => post.author === username);
+                    const list = document.getElementById('myPortfolioList');
+                    list.innerHTML = '';
+                    myPosts.forEach(post => {
+                        const p = JSON.parse(post.content);
+                        const card = document.createElement('div');
+                        card.className = 'portfolio-card';
+                        card.innerHTML = `
+                            <div class='title'>${p.name} 포트폴리오</div>
+                            <div>${p.hope}</div>
+                            <div class='actions'>
+                                <button onclick="location.href='/portfolio/write.html?id=${post.id}'">수정</button>
+                                <button class='delete-btn' onclick="deletePortfolio(${post.id})">삭제</button>
+                            </div>
+                        `;
+                        list.appendChild(card);
+                    });
+                }
             }
-        }
+            loadMyPortfolios();
 
-        // 회원 탈퇴
-        document.getElementById('withdrawBtn').onclick = async function() {
-            const password = document.getElementById('withdrawPassword').value;
-            if (!password) {
-                alert('비밀번호를 입력하세요.');
-                return;
+            // 포트폴리오 삭제
+            window.deletePortfolio = async function(id) {
+                if (!confirm('정말로 삭제하시겠습니까?')) return;
+                const res = await fetch(`https://port4dev-xh8k.onrender.com/api/posts/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    alert('삭제되었습니다.');
+                    loadMyPortfolios();
+                } else {
+                    alert('삭제에 실패했습니다.');
+                }
             }
-            if (!confirm('정말로 회원 탈퇴하시겠습니까? 모든 정보가 삭제됩니다.')) return;
-            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
-            const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            if (res.ok) {
-                alert('회원 탈퇴가 완료되었습니다.');
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = '/login.html';
-            } else {
-                const result = await res.json();
-                alert(result.message || '회원 탈퇴에 실패했습니다.');
-            }
-        };
-    });
+
+            // 회원 탈퇴
+            document.getElementById('withdrawBtn').onclick = async function() {
+                const password = document.getElementById('withdrawPassword').value;
+                if (!password) {
+                    alert('비밀번호를 입력하세요.');
+                    return;
+                }
+                if (!confirm('정말로 회원 탈퇴하시겠습니까? 모든 정보가 삭제됩니다.')) return;
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                const res = await fetch('https://port4dev-xh8k.onrender.com/api/members/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                if (res.ok) {
+                    alert('회원 탈퇴가 완료되었습니다.');
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = '/login.html';
+                } else {
+                    const result = await res.json();
+                    alert(result.message || '회원 탈퇴에 실패했습니다.');
+                }
+            };
+        });
     </script>
 </body>
 </html> 

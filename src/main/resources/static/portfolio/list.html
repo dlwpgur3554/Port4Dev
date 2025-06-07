@@ -310,7 +310,7 @@
         }
 
         console.log('포트폴리오 목록 조회 시작');
-        fetch('https://port4dev-xh8k.onrender.com/api/posts', {
+        fetch('https://port4dev-xh8k.onrender.com/api/posts?sort=createdAt:desc', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -323,7 +323,12 @@
             return res.json();
         })
         .then(posts => {
-            allPosts = posts;
+            // 서버에서 받은 데이터를 최신순으로 정렬 (createdAt 기준)
+            allPosts = posts.sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.updatedAt);
+                const dateB = new Date(b.createdAt || b.updatedAt);
+                return dateB - dateA; // 내림차순 정렬 (최신순)
+            });
             renderPage(currentPage);
             renderPagination();
         })
